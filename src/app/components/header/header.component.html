@@ -1,0 +1,32 @@
+<mat-toolbar color="primary">
+  <div>
+    <button mat-icon-button>
+      <mat-icon>menu</mat-icon>
+    </button>
+    <button routerLink="" mat-button>Поиск предприятий</button>
+  </div>
+  <div class="spacer"></div>
+
+  <button class="" mat-button routerLink="auth" routerLinkActive="active-button" >
+    <mat-icon fontSet="material-icons">login</mat-icon>
+    Войти
+  </button>
+
+  <button class="" mat-button routerLink="/auth/register" routerLinkActive="active-button">
+    <mat-icon fontSet="material-icons">login</mat-icon>
+    Регистрация
+  </button>
+
+<!--  <button class="" mat-button *ngIf="authService.isAuth()" (click)="authService.logout()">-->
+<!--    <mat-icon fontSet="material-icons">logout</mat-icon>-->
+<!--    Выйти-->
+<!--  </button>-->
+
+  <button class="" mat-button routerLink="/about" routerLinkActive="active-button">
+    <mat-icon fontSet="material-icons">help</mat-icon>
+    Помощь
+  </button>
+
+
+</mat-toolbar>
+

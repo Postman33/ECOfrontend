@@ -1,0 +1,132 @@
+<app-header></app-header>
+<div style="padding: 5px; position: relative">
+  <div style="display: inline-block; width: 50%; padding-left: 5px; padding-top: 5px">
+    <mat-tab-group>
+      <mat-tab label="Ввод координат">
+        <form class="form" style="margin-top: 20px; padding-left: 15px">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Широта</mat-label>
+            <input matInput [formControl]="Lat">
+          </mat-form-field>
+
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Долгота</mat-label>
+            <input matInput [formControl]="Long">
+          </mat-form-field>
+
+
+          Радиус <mat-slider
+          [formControl]="Raduis"
+          thumbLabel
+          [displayWith]="formatLabel"
+          tickInterval="1000"
+          step="1"
+          min="0"
+          max="7000"
+          aria-label="units"></mat-slider>
+
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Количество ближайших предприятий</mat-label>
+            <input matInput [formControl]="Nerest">
+          </mat-form-field>
+
+
+
+        </form>
+      </mat-tab>
+      <mat-tab label="Список предприятий"> <p>
+
+        <br>
+
+
+
+        <ng-template #loading>
+
+          Загружаем
+
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </ng-template>
+
+    <div *ngIf="!fetching; else loading">
+        <h2 style="text-align: center">Список предприятий</h2>
+        <div class = "center">
+        <button *ngIf="!fetching;" mat-button [ngStyle]="{backgroundColor:'#09a9ff', color: 'white', marginLeft:'25px'}"
+                                                                                                       (click)="getPlants()" >Начать поиск</button>
+      </div>
+        <div class="horizontal-scroll-wrapper squares" style="padding-left: 80px; margin-top: 10px">
+        <mat-card class="card" *ngFor="let plant of plantsData" style="margin-top: 20px;">
+          <mat-card-subtitle>{{plant["Название"]}}</mat-card-subtitle>
+          <mat-card-title>{{plant["Адрес"]}}</mat-card-title>
+          <mat-card-content>
+        </mat-card-content>
+          ИНН {{plant["ИНН"]}}
+          <br>
+         Вид деятельности: {{ plant["Вид деятельности"] }}
+
+          <mat-chip-list class="mat-chip-list-stacked" aria-label="Color selection">
+            <mat-chip *ngIf="plant.isFactory" selected color='accent'>
+             Загрязняющее предприятие, исходя из вида деятельности
+            </mat-chip>
+
+            <mat-chip class="chip_h2"  *ngIf="plant.TOP_5" selected color='warn'>
+              Максимальное загрязнение (ТОП-5) (CO) кг/м3
+              {{plant.map_pollution}}
+            </mat-chip>
+
+            <mat-chip class="chip_h2"  *ngIf="!plant.is_register_NBS" selected color='primary'>
+              Не зарегистр. как загрязняющее предприятие
+            </mat-chip>
+
+            <mat-chip class="chip_h2"  *ngIf="plant.is_register_NBS" selected color='primary'>
+              Зарегистр. как загрязняющее предприятие
+            </mat-chip>
+
+          </mat-chip-list>
+
+<!--         Кол-во выбросов: {{plant["real_PDK"]}}-->
+        <mat-divider inset></mat-divider>
+        <mat-card-footer>
+
+        </mat-card-footer>
+        </mat-card>
+
+      </div>
+
+  </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <div style= "display: inline-block;  position: absolute; right: 9%; width: 40%; padding-left: 5px; padding-top: 5px">
+    <mgl-map #mapComponent
+             [style]="'mapbox://styles/mapbox/streets-v9'"
+             [zoom]="[15]"
+             [center]="[ 61.402554,55.179401166285544]"
+             (mapClick)="handleClick($event); "
+    >
+
+      <mgl-popup
+        [lngLat]="[Long.value, Lat.value]"
+        [closeOnClick]="false"
+
+      >
+
+
+        Радиус {{Raduis.value}} м
+      </mgl-popup>
+
+      <mgl-popup *ngFor="let p of plantsData"
+        [lngLat]="[p.coords[1], p.coords[0]]"
+        [closeOnClick]="false"
+      >
+
+
+        ИНН {{p["ИНН"]}}
+        рас {{p["dist"]}}
+      </mgl-popup>
+    </mgl-map>
+  </div>
+</div>
+
+
+

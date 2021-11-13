@@ -1,0 +1,29 @@
+@import '~mapbox-gl/dist/mapbox-gl.css';
+mgl-map {
+  height: 90vh;
+  width: 48vw;
+}
+.form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+.card {
+  max-width: 400px;
+}
+.horizontal-scroll-wrapper{
+
+  height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.chip_h2{
+  height: 50px;
+}
+.center {
+  text-align: center;
+}
